@@ -1,9 +1,9 @@
 import React ,{useState}from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { removeTodo, updateTodo, completeTode} from '../Features/todo/todoSlice'
+import { removeTodo, updateTodo, updateTodoV2, completeTode} from '../Features/todo/todoSlice'
 function TodosList({todo}) {
 
-    // const todos = useSelector(state => state.todos)
+    const isTodoUpdatable = useSelector(state => state.isTodoUpdatable)
 
     const dispatch = useDispatch()
     const [text, setText] = useState(todo.text)
@@ -16,8 +16,10 @@ function TodosList({todo}) {
                 } px-4 py-2 rounded`}
                 key={todo.id}
               >
+                <div className='w-4/5 flex'>
                 <input 
                     type='checkbox' 
+                    className='mr-3 text-green-600 bg-gray-100 border-gray-300 rounded dark:border-gray-600'
                     value="" 
                     checked = {todo.completed} 
                     onChange={()=>{dispatch(completeTode(todo.id))}}
@@ -26,8 +28,8 @@ function TodosList({todo}) {
                     className={`w-3/5 text-left}`} 
                 >
                     <input 
-                        className={`border outline-none w-full bg-transparent rounded-lg ${
-                            isTodoEditable ? "border-black/10 px-2" : "border-transparent"
+                        className={`border outline-none w-full bg-transparent rounded-lg px-2 ${
+                            isTodoEditable ? "border-black/70 " : "border-transparent"
                         } ${todo.completed ? "line-through text-green-800" : "text-white"}`}
                         type='text' 
                         value = {text} 
@@ -36,8 +38,9 @@ function TodosList({todo}) {
                     />
                 </div>
 
-                
+                </div>
                 {todo.completed?"":
+                    <>
                     <button
                         onClick={() => {
                             if (isTodoEditable) {
@@ -45,10 +48,22 @@ function TodosList({todo}) {
                             } 
                             setIsTodoEditable((prev) => !prev);
                         }}
-                        className="text-white bg-green-500 border-0 py-1 px-4 rounded text-md"
+                        className= {`text-white ${isTodoUpdatable?"bg-green-400":"bg-green-600 hover:bg-green-500"} border-0 py-1 px-4 rounded text-md`}
+                        disabled = {isTodoUpdatable}
                     >
                         {isTodoEditable?"Save":"Edit"}
                     </button>
+                    <button
+                        onClick={() => {
+                            dispatch(updateTodoV2({todoInput : todo.text, isTodoUpdatable:true}));
+                            dispatch(removeTodo(todo.id))
+                        }}
+                        className={`text-white ${isTodoUpdatable?"bg-green-400":"bg-green-600 hover:bg-green-500"} border-0 py-1 px-4 rounded text-md`}
+                        disabled = {isTodoUpdatable}
+                    >
+                        Update
+                    </button>
+                    </>
                 }
                 
 

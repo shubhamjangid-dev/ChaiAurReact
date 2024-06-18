@@ -5,7 +5,9 @@ const initialState = {
         id : 1,
         text : "Hello",
         completed : false
-    }]
+    }],
+    todoInput:"",
+    isTodoUpdatable : false
 }
 
 // slice directly export nahi hota 
@@ -34,6 +36,11 @@ export const todoSlice = createSlice({
             state.todos = state.todos.map((todo)=>(todo.id === action.payload.id)?{...todo, text : action.payload.text }:todo)
         },
 
+        updateTodoV2 : (state, action) => {
+            state.todoInput = action.payload.todoInput
+            state.isTodoUpdatable = action.payload.isTodoUpdatable
+        },
+
         completeTode : (state, action) => {
             state.todos = state.todos.map((todo)=>(todo.id === action.payload)?{...todo, completed : !todo.completed }:todo)
         }
@@ -45,6 +52,7 @@ export const{
     addTodo,
     removeTodo,
     updateTodo,
+    updateTodoV2,
     completeTode
 } = todoSlice.actions
 
