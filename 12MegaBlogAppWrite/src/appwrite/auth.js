@@ -15,7 +15,7 @@ class AuthService {
       const userAccount = await this.account.create(ID.unique(), email, password, name); // parameters issi order me hone chahiye id<<email<<password<<name
       if (userAccount) {
         // if account created successfull then login the user
-        // return this.login({ email, password });
+        return this.login({ email, password });
         return userAccount;
       } else {
         return userAccount;
@@ -48,8 +48,8 @@ class AuthService {
       return await this.account.get();
     } catch (error) {
       console.log("Appwrite service :: getCurrentUser :: error", error);
+      return null;
     }
-    // return null;
   }
 }
 
